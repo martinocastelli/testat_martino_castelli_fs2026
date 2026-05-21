@@ -66,8 +66,7 @@ class MoveChillData:
             self.report += f"{feature:{feature_size}} | r = {value:+0.3f} | {valutation}\n"
 
     def plot(self, save_path=None):
-        self._feature_analysis = dict(sorted(self._feature_analysis.items(), key=lambda item: abs(item[1])))
-
+        self._feature_analysis = dict(sorted(self._feature_analysis.items(), key=lambda item: -abs(item[1])))
         fig, ax = plt.subplots(tight_layout=True)
         bars = ax.barh(self._feature_analysis.keys(), self._feature_analysis.values())
         ax.axvline(0, color='black')
@@ -85,111 +84,103 @@ if __name__ == "__main__":
     # --- MoveChillData -------------------------------------------------------
 
     # -------------------------------------------------------------------------
-    # --- 4.1 __init__(self, folder_path) -------------------------------------
+    print("# --- 4.1 __init__(self, folder_path) -------------------------------------")
     # -------------------------------------------------------------------------
     mcd = MoveChillData("taz.view_moveandchill.csv")
-    # try:
-    #     mcd = MoveChillData(pathlib.Path("taz.view_moveandchill.csv"))
-    # except TypeError as e:
-    #     print(e)
-    # try:
-    #     mcd = MoveChillData(["taz.view_moveandchill.csv"])
-    # except TypeError as e:
-    #     print(e)
+    mcd = MoveChillData(pathlib.Path("taz.view_moveandchill.csv"))
+    try:
+        mcd = MoveChillData(["taz.view_moveandchill.csv"])
+    except TypeError as e:
+        print(e)
     
-    # print(type(mcd._features))
-    # print(type(mcd._feature_analysis))
-    # print(type(mcd.report))
+    print(type(mcd._features))
+    print(type(mcd._feature_analysis))
+    print(type(mcd.report))
 
-    # print(mcd._df.head(5))
-    # print(mcd._df.info())
-    # print(mcd._features)
-    # print(mcd._feature_analysis)
-    # print(repr(mcd.report))
+    print(mcd._df.head(5))
+    print(mcd._df.info())
+    print(mcd._features)
+    print(mcd._feature_analysis)
+    print(repr(mcd.report))
     # -------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------
-    # --- 4.2 __str__(self) ---------------------------------------------------
+    print("# --- 4.2 __str__(self) ---------------------------------------------------")
     # -------------------------------------------------------------------------
+    print(mcd)
+    print(repr(str(mcd)))
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    print("# --- 4.3 __len__(self) ---------------------------------------------------")
+    # -------------------------------------------------------------------------
+    print(len(mcd))
+
+    # -------------------------------------------------------------------------
+    print("# --- 4.4 clean(self) -----------------------------------------------------")
+    # -------------------------------------------------------------------------
+    print(mcd._df.head(2))
+    print(
+        f"Humidity in DataFrame: min = {mcd._df['humidity'].min()}, max = {mcd._df['humidity'].max()}"
+    )
+    print(
+        f"Temperature in DataFrame: min = {mcd._df['temperature'].min()}, max = {mcd._df['temperature'].max()}"
+    )
+    print(mcd._df[mcd._df.isna().any(axis=1)].head(2))
+    print(mcd)
+    mcd.clean()
+    print(mcd._df.head(2))
+    print(
+        f"Humidity in DataFrame: min = {mcd._df['humidity'].min()}, max = {mcd._df['humidity'].max()}"
+    )
+    print(
+        f"Temperature in DataFrame: min = {mcd._df['temperature'].min()}, max = {mcd._df['temperature'].max()}"
+    )
+    print(mcd._df[mcd._df.isna().any(axis=1)])
+    print(mcd)
+
+    # -------------------------------------------------------------------------
+    print("# --- 4.5 create_features(self) -------------------------------------------")
+    # -------------------------------------------------------------------------
+    print(mcd._features)
+    print(mcd._df.head(2))
+    mcd.create_features()
+    print(mcd._df.head(2))
+    print(mcd._features)
+    print(mcd)
+    print(mcd._df.head(2))
+    mcd.create_features()
+    print(mcd._df.head(2))
+    print(mcd)
+    print(mcd._features)
+
+    # -------------------------------------------------------------------------
+    print("# --- 4.6 analyze_features(self) ------------------------------------------")
+    # -------------------------------------------------------------------------
+    mcd.create_features()
+    mcd.analyze_features()
+    print(mcd._feature_analysis)
     # print(mcd)
-    # print(repr(str(mcd)))
-    # -------------------------------------------------------------------------
+    feature_analysis = mcd.analyze_features()
+
+    print(type(feature_analysis))
+    print(feature_analysis)
 
     # -------------------------------------------------------------------------
-    # --- 4.3 __len__(self) ---------------------------------------------------
+    print("# --- 4.7 generate_report(self) -------------------------------------------")
     # -------------------------------------------------------------------------
-    # print(len(mcd))
+    mcd.create_features()
+    mcd.analyze_features()
+    mcd.generate_report()
+    print(mcd.report)
+    print(repr(mcd.report))
 
     # -------------------------------------------------------------------------
-    # --- 4.4 clean(self) -----------------------------------------------------
+    print("# --- 4.8 plot(self, save_path) -------------------------------------------")
     # -------------------------------------------------------------------------
-    # print(mcd._df.head(2))
-    # print(
-    #     f"Humidity in DataFrame: min = {mcd._df['humidity'].min()}, max = {mcd._df['humidity'].max()}"
-    # )
-    # print(
-    #     f"Temperature in DataFrame: min = {mcd._df['temperature'].min()}, max = {mcd._df['temperature'].max()}"
-    # )
-    # print(mcd._df[mcd._df.isna().any(axis=1)].head(2))
-    # print(mcd)
-    # print("calling clean ----------------------------------------------------------------------")
-    # mcd.clean()
-    # print(mcd._df.head(2))
-    # print(
-    #     f"Humidity in DataFrame: min = {mcd._df['humidity'].min()}, max = {mcd._df['humidity'].max()}"
-    # )
-    # print(
-    #     f"Temperature in DataFrame: min = {mcd._df['temperature'].min()}, max = {mcd._df['temperature'].max()}"
-    # )
-    # print(mcd._df[mcd._df.isna().any(axis=1)])
-    # print(mcd)
-
-    # -------------------------------------------------------------------------
-    # --- 4.5 create_features(self) -------------------------------------------
-    # -------------------------------------------------------------------------
-    # print(mcd._features)
-    # mcd.clean()
-    # print(mcd._df.head(2))
-    # mcd.create_features()
-    # print(mcd._df.head(2))
-    # print(mcd._features)
-    # print(mcd)
-    # print(mcd._df.head(2))
-    # mcd.create_features()
-    # print(mcd._df.head(2))
-    # print(mcd)
-    # print(mcd._features)
-
-    # -------------------------------------------------------------------------
-    # --- 4.6 analyze_features(self) ------------------------------------------
-    # -------------------------------------------------------------------------
-    # mcd.clean()
-    # mcd.create_features()
-    # mcd.analyze_features()
-    # print(mcd._feature_analysis)
-    # # print(mcd)
-    # feature_analysis = mcd.analyze_features()
-
-    # print(type(feature_analysis))
-    # print(feature_analysis)
-
-    # -------------------------------------------------------------------------
-    # --- 4.7 generate_report(self) -------------------------------------------
-    # -------------------------------------------------------------------------
-    # mcd.clean()
-    # mcd.create_features()
-    # mcd.analyze_features()
-    # mcd.generate_report()
-    # print(mcd.report)
-    # print(repr(mcd.report))
-
-    # -------------------------------------------------------------------------
-    # --- 4.8 plot(self, save_path) -------------------------------------------
-    # -------------------------------------------------------------------------
-    # mcd.clean()
-    # mcd.create_features()
-    # mcd.analyze_features()
-    # mcd.generate_report()
-    # fig = mcd.plot("feature_correlations.png")
-    # print(type(fig))
-    # plt.show()
+    mcd.create_features()
+    mcd.analyze_features()
+    mcd.generate_report()
+    fig = mcd.plot("feature_correlations.png")
+    print(type(fig))
+    plt.show()
